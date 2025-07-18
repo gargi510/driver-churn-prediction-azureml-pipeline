@@ -4,7 +4,7 @@
 
 ## 1. Project Overview & Business Objective
 
-In this project, I aimed to build a scalable and accurate driver churn prediction solution for Ola. Using Azure Machine Learning Studio, I leveraged serverless compute and AutoML to support proactive retention strategies.
+In this project, I aimed to build a scalable and accurate driver churn prediction solution for Ola. Using Azure Machine Learning Studio, I leveraged managed compute clusters for training and serverless endpoints for real-time inference to support proactive retention strategies.
 
 Some key points about the project and its business objective:
 
@@ -16,7 +16,6 @@ Some key points about the project and its business objective:
 |--------------------|-----------------------------------------------------------------|
 | Business Objective  | Predict driver attrition (churn) to support retention strategies at Ola |
 | Platform           | Azure Machine Learning Studio (AutoML + Designer)               |
-| Compute            | Serverless AML Compute Cluster                                  |
 | Dataset Overview   | Driver records from 2019–2020, including demographics, income, dates, performance |
 | Target Variable    | Attrition (1 if driver left, based on non-null LastWorkingDate; else 0) |
 
@@ -110,13 +109,20 @@ To ensure transparency and operational readiness:
 | Component         | Details                                              |
 |-------------------|------------------------------------------------------|
 | Explainability    | Enabled via Azure Responsible AI (`model_explain_run_id`) |
-| Deployment        | Real-time endpoint with scoring script and ONNX support |
+| Deployment        | Real-time serverless inference endpoint with scoring script and ONNX support |
 | Environment       | Conda-based, fully reproducible (`conda_env.yml`)    |
 | Model Artifacts   | `model.pkl`, `scoring_file.py`, MLTable dataset CSV  |
 
 ---
 
-## 7. Business Insights for Ola
+## 7. Compute and Deployment
+
+- **Training Compute:** Azure Machine Learning Compute Cluster (managed scalable VMs)  
+- **Inference Deployment:** Serverless real-time inference endpoint, enabling auto-scaling without infrastructure management
+
+---
+
+## 8. Business Insights for Ola
 
 Based on the model’s performance and feature importance, I derived actionable insights to help Ola reduce driver churn and improve operational efficiency:
 
