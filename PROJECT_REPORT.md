@@ -47,18 +47,18 @@ I ensured data quality and created meaningful features through the following ste
 
 I leveraged Azure AutoML to automate model training and used an ensemble approach to boost accuracy:
 
-- I ensembled five base models using weighted soft voting, optimizing for AUC_weighted.
+- I ensembled five base models using weighted soft voting, selecting the final model based on highest accuracy.
 - The base models included XGBoost, two LightGBM variants, Random Forest, and Extremely Randomized Trees.
-- The best individual model was XGBoost, achieving an AUC of 0.993.
+- The best individual model was XGBoost, achieving the highest accuracy of 97.1%.
 - I used cross-validation to ensure the model’s robustness.
 
 | Component              | Details                                                       |
 |------------------------|---------------------------------------------------------------|
 | Modeling Approach      | Azure AutoML with Voting Ensemble (5 iterations ensembled)     |
-| Ensemble Strategy     | Weighted soft voting, primary metric: AUC_weighted             |
+| Ensemble Strategy     | Weighted soft voting, final selection based on accuracy        |
 | Base Models Used      | XGBoostClassifier, LightGBM (x2), RandomForest, ExtremeRandomTrees |
 | Model Weights         | XGBoost: 0.40, LightGBM: 0.33, RandomForest: 0.13, ExtremeRandomTrees: 0.067 each |
-| Best Individual Model | Iteration 1 (XGBoost) with AUC: 0.993                           |
+| Best Individual Model | Iteration 1 (XGBoost) with Accuracy: 97.1%                     |
 | Pipeline Type         | AutoML-generated pipeline with MeanCrossValidation             |
 
 ---
@@ -128,7 +128,7 @@ Based on the model’s performance and feature importance, I derived actionable 
 
 ### Retention Strategies
 - The high accuracy and recall enable timely identification of drivers at risk of attrition, allowing proactive engagement through incentives or support.
-- Drivers with declining quarterly ratings or stagnant income are more likely to churn, suggesting targeted interventions for performance and earnings growth.
+- Drivers with declining quarterly ratings or income without increase over time are more likely to churn, suggesting targeted interventions for performance and earnings growth.
 
 ### Resource Planning
 - Predictive churn estimates allow Ola to better forecast driver availability, optimizing fleet size and reducing service gaps.
@@ -139,4 +139,6 @@ Based on the model’s performance and feature importance, I derived actionable 
 - Deployment of the real-time model means retention teams get up-to-date risk scores, enabling agile decision-making.
 
 ---
+
+# End of Summary
 
