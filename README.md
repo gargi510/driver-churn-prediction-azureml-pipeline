@@ -17,6 +17,15 @@ Due to privacy concerns, the proprietary driver dataset is **not included** in t
 ## Model Artifacts  
 Trained model files (`model.pkl`) are **excluded** from this repository to ensure repository cleanliness and security. All training and deployment scripts are included to enable model reproduction. Models are version-controlled and stored securely in Azure ML Model Registry.
 
+## Results Summary  
+The ensemble model pipeline achieved strong performance metrics including:  
+- Accuracy: ~97.1%  
+- Weighted AUC: ~99.4%  
+- F1 Score (weighted): ~97.1%  
+- Balanced Accuracy: ~97.5%  
+
+For a detailed project summary, full metric tables, and insights, please see the [PROJECT_REPORT.md](./PROJECT_REPORT.md) file.
+
 ## Getting Started
 
 ### Prerequisites  
