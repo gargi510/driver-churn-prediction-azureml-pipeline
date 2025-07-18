@@ -140,8 +140,3 @@ Based on the model’s performance and feature importance, I derived actionable 
 
 ---
 
-# End of Summary
-
----
-
-**Note:** For full detailed results, visualizations, and the comprehensive project report, please refer to the `project_report.pdf` in this repository.
