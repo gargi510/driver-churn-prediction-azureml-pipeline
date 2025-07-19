@@ -129,7 +129,7 @@ except Exception as e:
             print("Resolving Dataflows...")
             logger.info("Resolving Dataflows...")
             dataprep_json_obj = json.loads(dataprep_json)
-            if 'activities' in dataprep_json_obj: # json is serialized dataflows
+            if 'activities' in dataprep_json_obj: # json is serialized dataflowse
                 dataflow_dict = dataprep_utilities.load_dataflows_from_json(
                     dataprep_json)
                 for k in ['X', 'X_valid', 'sample_weight', 'sample_weight_valid']:
@@ -694,7 +694,7 @@ except Exception as e:
         return # PLACEHOLDER for RemoteScript helper functions
 
 workspace_name = "olaproject" # PLACEHOLDER
-subscription_id = "fbcb4403-efe1-4229-a7ce-7cf9bb71d3d6" # PLACEHOLDER
+subscription_id = "YOUR SUBSCRIPTION ID" # PLACEHOLDER
 resource_group = "Ensemble_Learning" # PLACEHOLDER
 experiment_name = "Default" # PLACEHOLDER
 iteration = "19"  # PLACEHOLDER
