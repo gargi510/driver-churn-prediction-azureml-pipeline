@@ -92,12 +92,17 @@ I utilized Azure AutoML to automate model training and selected a weighted soft 
 
 ## 9. Repository Contents
 
-- `automl_driver.py` — Training and AutoML pipeline script
-- feature-engineering.py - 
-- `scoring_file.py` — Scoring script for deployment  
-- `conda_env.yml` — Conda environment specification  
-- `driver_attrition_ml_table.csv` — Cleaned, feature-engineered dataset (small sample or data schema if dataset excluded)  
-- `model.pkl` — Serialized ensemble model artifact  
-- `project_report.pdf` — Full project report including detailed results and analysis  
-- `README.md` — This file
+| File/Folder                  | Description                                                                 |
+|------------------------------|-----------------------------------------------------------------------------|
+| `README.md`                  | Overview of the project, objectives, setup instructions, and results.       |
+| `PROJECT_REPORT.md`          | Detailed report covering data insights, modeling pipeline, metrics, and business recommendations. |
+| `LICENSE`                    | MIT license for open-source usage and distribution rights.                  |
+| `driver_attrition_ml_table.csv` | Final feature-engineered dataset used for model training (do not upload if private). |
+| `feature_engineering.py`     | Modular script for preprocessing, feature engineering, and target creation. |
+| `automl_driver.py`           | Azure AutoML training script using ensemble learning techniques.            |
+| `model.pkl`                  | Serialized trained model (Voting Ensemble) ready for deployment.            |
+| `script.py`                  | Scoring script for Azure ML real-time endpoint deployment.                  |
+| `conda.yaml`                 | Environment specification used in Azure ML for training/inference.          |
+| `requirements.txt`           | List of Python packages for local use or reproducibility.                   |
+
 
