@@ -6,7 +6,7 @@
 
 In this project, I developed a scalable and accurate driver churn prediction solution for Ola using Azure Machine Learning Studio. The goal was to predict driver attrition based on driver demographics, income, tenure, and performance data from 2019 to 2020, supporting retention and operational strategies.
 
-The solution includes data preprocessing, feature engineering, automated model training with Azure AutoML, ensemble modeling, explainability, and deployment of a real-time inference endpoint.
+The solution includes data preprocessing, feature engineering, automated model training with Azure AutoML, ensemble modeling, explainability, and a deployment-ready pipeline. While the model has not been deployed in production yet to avoid unnecessary costs, the pipeline and artifacts are fully compatible with Azure ML deployment infrastructure for future use.
 
 ---
 
@@ -69,16 +69,15 @@ I utilized Azure AutoML to automate model training and selected a weighted soft 
 ## 6. Explainability & Deployment
 
 - Model explainability is enabled using Azure Responsible AI, facilitating interpretation and trust.
-- The model is deployed as a real-time serverless inference endpoint with ONNX support for fast scoring.
-- A Conda environment (`conda_env.yml`) is provided to ensure reproducibility.
-- Deployment artifacts include `model.pkl`, `scoring_file.py`, and the MLTable dataset CSV.
+- The model pipeline and artifacts are fully prepared for deployment, including a Conda environment (`conda_env.yml`), `model.pkl`, and scoring script.
+- While I have not deployed the model yet to avoid incurring additional costs, it is ready for seamless deployment on Azure ML real-time endpoints as needed.
 
 ---
 
 ## 7. Compute and Infrastructure
 
 - Training was performed on Azure Machine Learning Compute Cluster, providing scalable managed VMs.
-- Real-time inference is hosted on a serverless endpoint, allowing automatic scaling and minimal infrastructure management.
+- The design supports deployment on serverless real-time endpoints, enabling automatic scaling and minimal infrastructure management.
 
 ---
 
@@ -104,5 +103,3 @@ I utilized Azure AutoML to automate model training and selected a weighted soft 
 | `script.py`                  | Scoring script for Azure ML real-time endpoint deployment.                  |
 | `conda.yaml`                 | Environment specification used in Azure ML for training/inference.          |
 | `requirements.txt`           | List of Python packages for local use or reproducibility.                   |
-
-
