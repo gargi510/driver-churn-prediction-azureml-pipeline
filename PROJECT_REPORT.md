@@ -1,62 +1,35 @@
-# Project Summary
+# End-to-End Driver Churn Prediction Pipeline Using Azure ML and Ensemble Models
 
 ---
 
-## 1. Project Overview & Business Objective
+## 1. Project Overview
 
-In this project, I aimed to build a scalable and accurate driver churn prediction solution for Ola. Using Azure Machine Learning Studio, I leveraged managed compute clusters for training and serverless endpoints for real-time inference to support proactive retention strategies.
+In this project, I developed a scalable and accurate driver churn prediction solution for Ola using Azure Machine Learning Studio. The goal was to predict driver attrition based on driver demographics, income, tenure, and performance data from 2019 to 2020, supporting retention and operational strategies.
 
-Some key points about the project and its business objective:
-
-- I focused on predicting driver attrition to enable timely interventions.
-- The dataset covered driver demographics, income, tenure, and performance data from 2019 to 2020.
-- My goal was to deploy a solution that supports real-time inference and is fully reproducible.
-
-| Aspect             | Details                                                         |
-|--------------------|-----------------------------------------------------------------|
-| Business Objective  | Predict driver attrition (churn) to support retention strategies at Ola |
-| Platform           | Azure Machine Learning Studio (AutoML + Designer)               |
-| Dataset Overview   | Driver records from 2019–2020, including demographics, income, dates, performance |
-| Target Variable    | Attrition (1 if driver left, based on non-null LastWorkingDate; else 0) |
+The solution includes data preprocessing, feature engineering, automated model training with Azure AutoML, ensemble modeling, explainability, and a deployment-ready pipeline. While the model has not been deployed in production yet to avoid unnecessary costs, the pipeline and artifacts are fully compatible with Azure ML deployment infrastructure for future use.
 
 ---
 
 ## 2. Data Preparation & Feature Engineering
 
-I ensured data quality and created meaningful features through the following steps:
-
-- I used KNNImputer (k=5) to impute missing values for numerical and binary fields.
-- I aggregated data at the Driver_ID level to create driver-specific features.
-- I engineered features indicating whether quarterly ratings and income increased over time.
-- For categorical variables like Gender, City, and Designation, I applied mode imputation.
-- I exported the cleaned and feature-engineered dataset for modeling.
-
-| Step                | Details                                                          |
-|---------------------|------------------------------------------------------------------|
-| Imputation Strategy | KNNImputer (k=5) for numerical and binary features              |
-| Feature Engineering | Aggregation at Driver_ID level                                   |
-|                     | - QuarterlyRating_Increased: any improvement over time          |
-|                     | - Income_Increased: income growth over months                    |
-|                     | - Mode used for Gender, City, Education, Designation            |
-|                     | - Reporting_Date = max, Dateofjoining = min                      |
-| Final Dataset       | Cleaned, feature-engineered dataset exported as `driver_attrition_ml_table.csv` |
+- Missing values in numerical and binary features were imputed using KNNImputer (k=5).
+- Data was aggregated at the driver level (Driver_ID) to create features such as:
+  - QuarterlyRating_Increased: Whether the driver’s quarterly rating improved over time.
+  - Income_Increased: Whether income increased during the observed period.
+- Mode imputation was applied for categorical variables like Gender, City, Education, and Designation.
+- The final cleaned and feature-engineered dataset was exported as `driver_attrition_ml_table.csv` for modeling.
 
 ---
 
 ## 3. Modeling Details
 
-I leveraged Azure AutoML to automate model training and used an ensemble approach to boost accuracy:
-
-- I ensembled five base models using weighted soft voting, selecting the final model based on highest accuracy.
-- The base models included XGBoost, two LightGBM variants, Random Forest, and Extremely Randomized Trees.
-- The best individual model was XGBoost, achieving the highest accuracy of 97.1%.
-- I used cross-validation to ensure the model’s robustness.
+I utilized Azure AutoML to automate model training and selected a weighted soft voting ensemble model based on **highest accuracy**.
 
 | Component              | Details                                                       |
 |------------------------|---------------------------------------------------------------|
-| Modeling Approach      | Azure AutoML with Voting Ensemble (5 iterations ensembled)     |
-| Ensemble Strategy     | Weighted soft voting, final selection based on accuracy        |
-| Base Models Used      | XGBoostClassifier, LightGBM (x2), RandomForest, ExtremeRandomTrees |
+| Modeling Approach      | Azure AutoML with Voting Ensemble (5 base models ensembled)    |
+| Ensemble Strategy     | Weighted soft voting, final model selected on highest accuracy |
+| Base Models Used      | XGBoostClassifier, LightGBM (two variants), RandomForest, ExtremeRandomTrees |
 | Model Weights         | XGBoost: 0.40, LightGBM: 0.33, RandomForest: 0.13, ExtremeRandomTrees: 0.067 each |
 | Best Individual Model | Iteration 1 (XGBoost) with Accuracy: 97.1%                     |
 | Pipeline Type         | AutoML-generated pipeline with MeanCrossValidation             |
@@ -65,21 +38,17 @@ I leveraged Azure AutoML to automate model training and used an ensemble approac
 
 ## 4. Model Hyperparameters
 
-Here are the main hyperparameters I tuned for the top base models in the ensemble:
-
-| Model            | learning_rate | n_estimators | max_depth | min_child_weight | subsample | colsample_bytree | gamma | num_leaves | min_child_samples | min_samples_split | min_samples_leaf | bootstrap | criterion |
-|------------------|---------------|--------------|-----------|------------------|-----------|------------------|-------|------------|-------------------|-------------------|------------------|-----------|-----------|
-| XGBoostClassifier | 0.1          | 100          | 6         | 1                | 0.8       | 0.8              | 0     | –          | –                 | –                 | –                | –         | –         |
-| LightGBM_1        | 0.05         | 200          | -1        | –                | 0.7       | 0.9              | –     | 31         | 20                | –                 | –                | –         | –         |
-| RandomForest      | –            | 100          | None      | –                | –         | –                | –     | –          | –                 | 2                 | 1                | True      | gini      |
-| ExtremeRandomTrees| –            | 100          | None      | –                | –         | –                | –     | –          | –                 | 2                 | 1                | False     | gini      |
-| LightGBM_2        | 0.03         | 150          | 10        | –                | 0.8       | 0.8              | –     | 40         | 30                | –                 | –                | –         | –         |
+| Model             | learning_rate | n_estimators | max_depth | min_child_weight | subsample | colsample_bytree | gamma | num_leaves | min_child_samples | min_samples_split | min_samples_leaf | bootstrap | criterion |
+|-------------------|---------------|--------------|-----------|------------------|-----------|------------------|-------|------------|-------------------|-------------------|------------------|-----------|-----------|
+| XGBoostClassifier | 0.1           | 100          | 6         | 1                | 0.8       | 0.8              | 0     | –          | –                 | –                 | –                | –         | –         |
+| LightGBM_1        | 0.05          | 200          | -1        | –                | 0.7       | 0.9              | –     | 31         | 20                | –                 | –                | –         | –         |
+| RandomForest      | –             | 100          | None      | –                | –         | –                | –     | –          | –                 | 2                 | 1                | True      | gini      |
+| ExtremeRandomTrees| –             | 100          | None      | –                | –         | –                | –     | –          | –                 | 2                 | 1                | False     | gini      |
+| LightGBM_2        | 0.03          | 150          | 10        | –                | 0.8       | 0.8              | –     | 40         | 30                | –                 | –                | –         | –         |
 
 ---
 
 ## 5. Performance Metrics
-
-My ensemble model delivered strong predictive performance:
 
 | Metric                | Value     |
 |-----------------------|-----------|
@@ -92,53 +61,44 @@ My ensemble model delivered strong predictive performance:
 | Recall (Macro)        | 0.975     |
 | Balanced Accuracy     | 97.5%     |
 | Sensitivity (Recall)  | 97.1%     |
-| Specificity           | (calculated if available) |
+| Specificity           | (if available) |
 | Confusion Matrix      | Available in project reports |
 
 ---
 
-## 6. Explainability & Deployment
+## 6. Explainability & Deployment Readiness
 
-To ensure transparency and operational readiness:
-
-- I enabled model explainability via Azure Responsible AI.
-- I deployed a real-time scoring endpoint with ONNX support.
-- The Conda environment was defined to ensure reproducibility.
-- I saved all artifacts needed for deployment and ongoing maintenance.
-
-| Component         | Details                                              |
-|-------------------|------------------------------------------------------|
-| Explainability    | Enabled via Azure Responsible AI (`model_explain_run_id`) |
-| Deployment        | Real-time serverless inference endpoint with scoring script and ONNX support |
-| Environment       | Conda-based, fully reproducible (`conda_env.yml`)    |
-| Model Artifacts   | `model.pkl`, `scoring_file.py`, MLTable dataset CSV  |
+- Model explainability is enabled using Azure Responsible AI, facilitating interpretation and trust.
+- The model pipeline and artifacts are fully prepared for deployment, including a Conda environment (`conda_env.yml`), `model.pkl`, and scoring script.
+- While I have not deployed the model yet to avoid incurring additional costs, it is ready for seamless deployment on Azure ML real-time endpoints as needed.
 
 ---
 
-## 7. Compute and Deployment
+## 7. Compute and Infrastructure
 
-- **Training Compute:** Azure Machine Learning Compute Cluster (managed scalable VMs)  
-- **Inference Deployment:** Serverless real-time inference endpoint, enabling auto-scaling without infrastructure management
+- Training was performed on Azure Machine Learning Compute Cluster, providing scalable managed VMs.
+- The design supports deployment on serverless real-time endpoints, enabling automatic scaling and minimal infrastructure management.
 
 ---
 
 ## 8. Business Insights for Ola
 
-Based on the model’s performance and feature importance, I derived actionable insights to help Ola reduce driver churn and improve operational efficiency:
-
-### Retention Strategies
-- The high accuracy and recall enable timely identification of drivers at risk of attrition, allowing proactive engagement through incentives or support.
-- Drivers with declining quarterly ratings or income without increase over time are more likely to churn, suggesting targeted interventions for performance and earnings growth.
-
-### Resource Planning
-- Predictive churn estimates allow Ola to better forecast driver availability, optimizing fleet size and reducing service gaps.
-- Monitoring income and performance trends can help design personalized retention programs, improving driver satisfaction.
-
-### Risk Mitigation
-- Early detection of at-risk drivers reduces sudden drops in driver supply, ensuring a stable service experience for customers.
-- Deployment of the real-time model means retention teams get up-to-date risk scores, enabling agile decision-making.
+- The high accuracy and recall of the model enable early identification of drivers likely to churn, allowing Ola to implement timely retention measures.
+- Drivers showing no income growth or decline in quarterly ratings are at higher risk of churn, suggesting key performance and incentive areas to monitor.
+- Proactive churn prediction supports efficient fleet management by anticipating driver availability and reducing operational disruptions.
 
 ---
 
-# End of Summary
+## 9. Repository Contents
 
+| File/Folder                  | Description                                                                 |
+|------------------------------|-----------------------------------------------------------------------------|
+| `README.md`                  | Overview of the project, objectives, setup instructions, and results.       |
+| `PROJECT_REPORT.md`          | Detailed report covering data insights, modeling pipeline, metrics, and business recommendations. |
+| `LICENSE`                    | MIT license for open-source usage and distribution rights.                  |
+| `feature_engineering.py`     | Modular script for preprocessing, feature engineering, and target creation. |
+| `automl_driver.py`           | Azure AutoML training script using ensemble learning techniques.            |
+| `model.pkl`                  | Serialized trained model (Voting Ensemble) ready for deployment.            |
+| `script.py`                  | Scoring script for Azure ML real-time endpoint deployment.                  |
+| `conda.yaml`                 | Environment specification used in Azure ML for training/inference.          |
+| `requirements.txt`           | List of Python packages for local use or reproducibility.                   |
