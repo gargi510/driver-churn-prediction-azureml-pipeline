@@ -1,0 +1,24 @@
+## 10. Alternative Manual ML Pipeline (2025)
+
+In addition to the Azure AutoML-based solution, this repository now includes a fully custom **driver churn prediction pipeline** built entirely with Python and Jupyter Notebooks.
+
+This version showcases transparent, code-first modeling — enabling flexibility, explainability, and reproducibility — without reliance on AutoML platforms.
+
+### 🔍 Highlights:
+- Manual data cleaning, KNN imputation, and SMOTE-based class balancing
+- Extensive feature engineering (`Income_per_Tenure`, `Tenure`, etc.)
+- Five ensemble models: **RandomForest, XGBoost, LightGBM, CatBoost, AdaBoost**
+- Voting ensemble and standalone performance comparison
+- Visualized feature importance, confusion matrix, ROC/PR curves
+- Actionable driver retention recommendations
+
+### 🧠 Model Metrics:
+| Metric            | Value   |
+|-------------------|---------|
+| Accuracy          | 93.0%   |
+| Precision (Churn) | 98.0%   |
+| Recall (Churn)    | 91.0%   |
+| F1-Score (Churn)  | 95.0%   |
+| AUC Score         | 0.9742  |
+
+> This complements the Azure ML deployment version and demonstrates versatility across AutoML and manual MLOps workflows.
